@@ -8,8 +8,6 @@
 #include "ti_drivers_open_close.h"
 #include "ti_board_open_close.h"
 
-/* Output channel - A or B */
-#define APP_EPWM_OUTPUT_CH              (EPWM_OUTPUT_CH_A)
 /* TB frequency in Hz - so that /4 divider is used */
 #define APP_EPWM_TB_FREQ                (CONFIG_EPWM0_FCLK / 4U)
 
@@ -83,7 +81,7 @@ void epwm_duty_cycle_main(void *args)
                 updateEpwmDutyCycle(&epwm_config[i], dutyCycle[i][j], (j == 0 ? EPWM_CC_CMP_A : EPWM_CC_CMP_B));
 
                 /* Configure PWM for the new duty cycle */
-                App_epwmConfig(gEpwmBaseAddr[i], APP_EPWM_OUTPUT_CH, CONFIG_EPWM0_FCLK, &epwm_config[i]);
+                App_epwmConfig(gEpwmBaseAddr[i], (j == 0 ? EPWM_OUTPUT_CH_A : EPWM_OUTPUT_CH_B), CONFIG_EPWM0_FCLK, &epwm_config[i]);
             }
         }
         /* The sweep should happen over 1 second */
