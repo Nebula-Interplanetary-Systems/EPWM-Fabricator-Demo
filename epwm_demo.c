@@ -35,14 +35,10 @@ typedef struct {
 void updateEpwmDutyCycle(ePWM_PARAMS *config, uint32_t newDutyCycle) {
     config->dutyCycle = newDutyCycle;
     config->compVal = (config->prdVal - ((config->dutyCycle * config->prdVal) / 100U));
-    config->prdVal = ((APP_EPWM_TB_FREQ / config->outputFreq) / 2U);
-    config->compVal = (config->prdVal - ((config->dutyCycle * config->prdVal) / 100U));
 }
 
 void updateEpwmOutputFreq(ePWM_PARAMS *config, uint32_t newOutputFreq) {
     config->outputFreq = newOutputFreq;
-    config->prdVal = ((APP_EPWM_TB_FREQ / config->outputFreq) / 2U);
-    config->compVal = (config->prdVal - ((config->dutyCycle * config->prdVal) / 100U));
     config->prdVal = ((APP_EPWM_TB_FREQ / config->outputFreq) / 2U);
     config->compVal = (config->prdVal - ((config->dutyCycle * config->prdVal) / 100U));
 }
@@ -58,13 +54,14 @@ uint32_t gEpwmBaseAddr;
 
 void epwm_duty_cycle_main(void *args)
 {
+    HwiP_Params         hwiPrms;
+    uint32_t           status;
+
     bool                increasing = true;
     uint32_t            dutyCycle  = 0;
+    ePWM_PARAMS         epwm_config;
 
-    ePWM_PARAMS epwm_config = {
-        .dutyCycle  = 0U,
-        .outputFreq = 1U * 1000U,
-    };
+    updateEpwmOutputFreq(&epwm_config, 1U * 1000U);
 
     /* Open drivers to open the UART driver for console */
     Drivers_open();
@@ -87,7 +84,7 @@ void epwm_duty_cycle_main(void *args)
         App_epwmConfig(gEpwmBaseAddr, APP_EPWM_OUTPUT_CH, CONFIG_EPWM0_FCLK, &epwm_config);
 
         /* The sweep should happen over 1 second */
-        vTaskDelay(pdMS_TO_TICKS(1000U / 100U));
+        vTaskDelay(pdMS_TO_TICKS(10U));
     }
 
     Board_driversClose();
