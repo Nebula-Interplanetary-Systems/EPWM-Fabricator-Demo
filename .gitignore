@@ -1,0 +1,42 @@
+# CCS specific files
+Debug/
+Release/
+*.out
+*.hex
+*.elf
+*.map
+*.o
+*.obj
+
+# User-specific files
+*.user
+*.settings/
+*.launch
+
+# Backup and temporary files
+*~
+*.bak
+*.tmp
+*.temp
+
+# Other common ignore patterns
+.vscode/
+.idea/
+*.exe
+*.dll
+
+# Duplicate entry removed
+*.rprc
+
+# Exclude project settings file which contains user-specific paths
+*.ccsproject
+*.ccsworkspace
+
+# Ignore logs and databases used by CCS
+*.log
+*.dat
+*.history/
+
+# Exclude system files
+.DS_Store
+Thumbs.db
