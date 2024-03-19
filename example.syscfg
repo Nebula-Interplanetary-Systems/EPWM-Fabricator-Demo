@@ -11,6 +11,9 @@
 const epwm            = scripting.addModule("/drivers/epwm/epwm", {}, false);
 const epwm1           = epwm.addInstance();
 const epwm2           = epwm.addInstance();
+const epwm3           = epwm.addInstance();
+const gpio            = scripting.addModule("/drivers/gpio/gpio", {}, false);
+const gpio1           = gpio.addInstance();
 const addr_translate  = scripting.addModule("/kernel/dpl/addr_translate", {}, false);
 const addr_translate1 = addr_translate.addInstance();
 const clock           = scripting.addModule("/kernel/dpl/clock");
@@ -27,22 +30,38 @@ const mpu_armv75      = mpu_armv7.addInstance();
  */
 epwm1.$name            = "CONFIG_EPWM0";
 epwm1.EPWM.$assign     = "EHRPWM0";
-epwm1.EPWM.A.$assign   = "ball.V21";
-epwm1.EPWM.B.$assign   = "ball.U21";
+epwm1.EPWM.A.$assign   = "GPMC0_AD3";
+epwm1.EPWM.B.$assign   = "GPMC0_AD4";
 epwm1.EPWM.SYNCO.$used = false;
 epwm1.EPWM.SYNCI.rx    = false;
 epwm1.EPWM.SYNCI.$used = false;
 
 epwm2.$name            = "CONFIG_EPWM1";
+epwm2.EPWM.$assign     = "EHRPWM1";
+epwm2.EPWM.A.$assign   = "GPMC0_AD5";
+epwm2.EPWM.B.$assign   = "GPMC0_AD6";
 epwm2.EPWM.SYNCO.$used = false;
 epwm2.EPWM.SYNCI.$used = false;
+
+epwm3.$name            = "CONFIG_EPWM2";
+epwm3.EPWM.$assign     = "EHRPWM2";
+epwm3.EPWM.A.$assign   = "GPMC0_AD8";
+epwm3.EPWM.B.$assign   = "GPMC0_AD9";
+epwm3.EPWM.SYNCO.$used = false;
+epwm3.EPWM.SYNCI.$used = false;
+
+gpio1.$name                = "ePWM2_MUX";
+gpio1.pinDir               = "OUTPUT";
+gpio1.GPIO.$assign         = "GPIO0";
+gpio1.GPIO.gpioPin.pu_pd   = "pu";
+gpio1.GPIO.gpioPin.$assign = "GPMC0_AD11";
 
 addr_translate1.$name = "CONFIG_ADDR_TRANSLATE_REGION0";
 
 debug_log.enableUartLog            = true;
 debug_log.uartLog.$name            = "CONFIG_UART0";
-debug_log.uartLog.UART.RXD.$assign = "ball.B10";
-debug_log.uartLog.UART.TXD.$assign = "ball.B11";
+debug_log.uartLog.UART.RXD.$assign = "UART0_RXD";
+debug_log.uartLog.UART.TXD.$assign = "UART0_TXD";
 
 mpu_armv71.$name             = "CONFIG_MPU_REGION0";
 mpu_armv71.size              = 31;
@@ -74,7 +93,4 @@ mpu_armv75.accessPermissions = "Supervisor RD, User RD";
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
-epwm2.EPWM.$suggestSolution             = "EHRPWM1";
-epwm2.EPWM.A.$suggestSolution           = "ball.T20";
-epwm2.EPWM.B.$suggestSolution           = "ball.T18";
 debug_log.uartLog.UART.$suggestSolution = "USART0";
